@@ -1,0 +1,11 @@
+# Local tooling (machine-specific paths)
+.claude/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# The web app has its own .gitignore (node_modules, .next, .env*, …) in web/
