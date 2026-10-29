@@ -86,7 +86,7 @@ export function HeroReveal() {
       <>
         <section className="relative h-[100svh] min-h-[560px]">
           <Photo name="heroAerial" preload className="absolute inset-0" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/30" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(0_0_0/0.65),rgb(0_0_0/0.3)_45%,rgb(0_0_0/0.45)),linear-gradient(to_right,rgb(0_0_0/0.35),transparent_65%)]" />
           <HeroCopy />
         </section>
         <section className="container-x py-[72px]">
@@ -129,7 +129,7 @@ function PinnedHero() {
           <motion.div style={{ scale: imgScale }} className="absolute inset-0">
             <Photo name="heroAerial" preload className="absolute inset-0" />
           </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/30" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(0_0_0/0.65),rgb(0_0_0/0.3)_45%,rgb(0_0_0/0.45)),linear-gradient(to_right,rgb(0_0_0/0.35),transparent_65%)]" />
           <HeroCopy opacity={heroOpacity} />
         </motion.div>
 
