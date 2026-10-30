@@ -48,6 +48,17 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
+/* Arabic: IBM Plex Sans Arabic, with Geist for Latin runs (grades, standards, numbers). */
+html[lang^="ar"] body {
+  font-family: var(--font-arabic), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Keep phone numbers, emails and codes left-to-right inside Arabic text. */
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
 ::selection {
   background: var(--color-brand-200);
 }
@@ -181,6 +192,30 @@ body {
 }
 .rise-in {
   animation: rise-in 0.7s var(--ease-out) both;
+}
+
+/* Right-to-left adjustments. Arabic script needs no negative tracking, no uppercase
+   labels and more line height than Latin display type. */
+[dir="rtl"] .bar-in {
+  transform-origin: right;
+}
+html[lang^="ar"] :is(.t-display, .t-h1, .t-h2, .t-h3) {
+  letter-spacing: 0;
+}
+html[lang^="ar"] .t-display {
+  line-height: 1.15;
+}
+html[lang^="ar"] .t-h1 {
+  line-height: 1.2;
+}
+html[lang^="ar"] .t-h2 {
+  line-height: 1.3;
+}
+html[lang^="ar"] .t-label {
+  font-family: var(--font-arabic), var(--font-geist-mono), monospace;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.8125rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { products } from "@/content/products";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { Cutout } from "@/components/illustrations/iso";
 import { Button, CircleLink, SectionLabel } from "@/components/ui/primitives";
 
 export function ProductSelector() {
+  const { c, href } = useI18n();
+  const { products } = c;
   const [active, setActive] = useState(0);
   const p = products[active];
 
@@ -15,27 +17,26 @@ export function ProductSelector() {
     <section className="border-y border-line" aria-labelledby="products-heading">
       <div className="container-x grid lg:grid-cols-12">
         {/* intro */}
-        <div className="py-16 lg:col-span-3 lg:border-r lg:border-dashed lg:border-line lg:py-14 lg:pr-8">
-          <SectionLabel>Our products</SectionLabel>
+        <div className="py-16 lg:col-span-3 lg:border-e lg:border-dashed lg:border-line lg:py-14 lg:pe-8">
+          <SectionLabel>{c.home.productsLabel}</SectionLabel>
           <h2 id="products-heading" className="sr-only">
-            Our products
+            {c.home.productsLabel}
           </h2>
           <p className="mt-6 text-muted">
-            From a single bundle of rebar to full structural packages, we keep the steel Bahrain builds with in stock,
-            ready to cut and deliver.
+            {c.home.productsIntro}
           </p>
-          <Button href="/products" className="mt-8">
-            View all products
+          <Button href={href("/products")} className="mt-8">
+            {c.home.viewAll}
           </Button>
         </div>
 
         {/* desktop list + card */}
         <div className="hidden lg:col-span-9 lg:grid lg:grid-cols-9">
-          <ul className="col-span-5 flex flex-col justify-center gap-1 py-14 pl-10" role="list">
+          <ul className="col-span-5 flex flex-col justify-center gap-1 py-14 ps-10" role="list">
             {products.map((item, i) => (
               <li key={item.slug}>
                 <Link
-                  href={`/products/${item.slug}`}
+                  href={href(`/products/${item.slug}`)}
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
                   aria-current={i === active ? "true" : undefined}
@@ -71,7 +72,7 @@ export function ProductSelector() {
               </div>
               <div className="flex items-end justify-between gap-4">
                 <p className="max-w-[28ch] text-sm text-muted">{p.summary}</p>
-                <CircleLink href={`/products/${p.slug}`} label={`View ${p.name}`} />
+                <CircleLink href={href(`/products/${p.slug}`)} label={`${c.ui.view} ${p.name}`} />
               </div>
             </div>
           </div>
@@ -81,7 +82,7 @@ export function ProductSelector() {
         <ul className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-16 lg:hidden" role="list">
           {products.map((item) => (
             <li key={item.slug} className="w-[78%] shrink-0 snap-start sm:w-[45%]">
-              <Link href={`/products/${item.slug}`} className="flex aspect-[4/5] flex-col rounded-xl bg-tint p-5">
+              <Link href={href(`/products/${item.slug}`)} className="flex aspect-[4/5] flex-col rounded-xl bg-tint p-5">
                 <p className="t-h3">{item.name}</p>
                 <div className="flex flex-1 items-center">
                   <Cutout kind={item.cutout} className="w-full" />

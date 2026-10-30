@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { sendContact, type ContactState } from "@/app/contact/actions";
-import { site } from "@/content/site";
+import { sendContact, type ContactState } from "@/app/[lang]/contact/actions";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { T } from "@/components/ui/T";
 import { ArrowIcon } from "@/components/ui/primitives";
 
@@ -18,6 +18,7 @@ function Field({
   error,
   defaultValue,
   textarea = false,
+  dir,
 }: {
   name: string;
   label: string;
@@ -27,6 +28,8 @@ function Field({
   error?: string;
   defaultValue?: string;
   textarea?: boolean;
+  /** Force LTR for emails and phone numbers on Arabic pages. */
+  dir?: "ltr";
 }) {
   const cls = `mt-2 w-full rounded border bg-surface px-4 py-3 text-base outline-none transition-colors focus:border-brand-700 focus:ring-2 focus:ring-brand-700/20 ${
     error ? "border-red-700" : "border-line"
@@ -41,7 +44,7 @@ function Field({
       {textarea ? (
         <textarea id={name} name={name} rows={6} required={required} defaultValue={defaultValue} aria-invalid={!!error} aria-describedby={describedBy} className={cls} />
       ) : (
-        <input id={name} name={name} type={type} required={required} autoComplete={autoComplete} defaultValue={defaultValue} aria-invalid={!!error} aria-describedby={describedBy} className={cls} />
+        <input id={name} name={name} type={type} dir={dir} required={required} autoComplete={autoComplete} defaultValue={defaultValue} aria-invalid={!!error} aria-describedby={describedBy} className={cls} />
       )}
       {error && (
         <p id={`${name}-error`} className="mt-1 text-sm text-red-700">
@@ -53,13 +56,15 @@ function Field({
 }
 
 export function ContactForm() {
+  const { lang, c, href } = useI18n();
+  const f = c.contact.form;
   const [state, action, pending] = useActionState(sendContact, initial);
 
   if (state.status === "success") {
     return (
       <div role="status" className="rounded-xl bg-tint p-8">
-        <p className="t-h3">Thanks, your message is with our sales team.</p>
-        <p className="mt-2 text-muted">We&apos;ll be in touch today or the next working day.</p>
+        <p className="t-h3">{f.successTitle}</p>
+        <p className="mt-2 text-muted">{f.successBody}</p>
       </div>
     );
   }
@@ -69,21 +74,25 @@ export function ContactForm() {
 
   return (
     <form action={action} noValidate className="space-y-5">
+      <input type="hidden" name="lang" value={lang} />
       {state.message && (
         <p role="alert" className="rounded border border-red-700/30 bg-red-50 px-4 py-3 text-sm text-red-800">
-          {state.message} <T>{site.phone}</T>
+          {state.message}{" "}
+          <span className="ltr inline-block">
+            <T>{c.site.phone}</T>
+          </span>
         </p>
       )}
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field name="name" label="Name" required autoComplete="name" error={e.name} defaultValue={v.name} />
-        <Field name="company" label="Company" autoComplete="organization" defaultValue={v.company} />
-        <Field name="email" label="Email" type="email" required autoComplete="email" error={e.email} defaultValue={v.email} />
-        <Field name="phone" label="Phone" type="tel" autoComplete="tel" defaultValue={v.phone} />
+        <Field name="name" label={f.name} required autoComplete="name" error={e.name} defaultValue={v.name} />
+        <Field name="company" label={f.company} autoComplete="organization" defaultValue={v.company} />
+        <Field name="email" label={f.email} type="email" dir="ltr" required autoComplete="email" error={e.email} defaultValue={v.email} />
+        <Field name="phone" label={f.phone} type="tel" dir="ltr" autoComplete="tel" defaultValue={v.phone} />
       </div>
-      <Field name="message" label="Message" required textarea error={e.message} defaultValue={v.message} />
+      <Field name="message" label={f.message} required textarea error={e.message} defaultValue={v.message} />
 
       {/* Honeypot */}
-      <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+      <div aria-hidden className="absolute -start-[9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="website">Website</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
@@ -98,11 +107,11 @@ export function ContactForm() {
             aria-describedby={e.consent ? "consent-error" : undefined}
           />
           <span>
-            I agree to the{" "}
-            <Link href="/privacy" className="text-brand-700 underline underline-offset-2">
-              Privacy Policy
+            {f.consentBefore}
+            <Link href={href("/privacy")} className="text-brand-700 underline underline-offset-2">
+              {f.consentLink}
             </Link>
-            . <span className="text-muted">*</span>
+            {f.consentAfter} <span className="text-muted">*</span>
           </span>
         </label>
         {e.consent && (
@@ -117,7 +126,7 @@ export function ContactForm() {
         disabled={pending}
         className="inline-flex items-center gap-2 rounded bg-brand-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-brand-700 disabled:opacity-60"
       >
-        {pending ? "Sending…" : "Send message"}
+        {pending ? f.sending : f.send}
         <ArrowIcon />
       </button>
     </form>

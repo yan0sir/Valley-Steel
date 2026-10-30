@@ -19,7 +19,13 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000.
+Then open http://localhost:3000 (English) or http://localhost:3000/ar (Arabic).
+
+## English & Arabic
+
+- English is served at `/…`, Arabic at `/ar/…` (right-to-left, IBM Plex Sans Arabic). All routes live in `web/app/[lang]`; `web/proxy.ts` maps unprefixed URLs to English.
+- All copy lives in `web/content/en.ts` and `web/content/ar.ts`, which share one type (`web/content/types.ts`), so a missing translation fails the build.
+- The Arabic text is a draft translation and should be reviewed by a native Arabic copywriter before launch.
 
 ## Status
 

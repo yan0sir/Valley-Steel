@@ -3,13 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { nav } from "@/content/site";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import { stripLocale } from "@/lib/i18n";
+import { LanguageSwitch } from "./LanguageSwitch";
 import { Logo } from "./Logo";
 import { MenuOverlay } from "./MenuOverlay";
 
 export function Header() {
+  const { c, href } = useI18n();
   const pathname = usePathname();
-  const overHero = pathname === "/";
+  const overHero = stripLocale(pathname) === "/";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -21,6 +24,7 @@ export function Header() {
   }, []);
 
   const solid = scrolled || !overHero;
+  const linkColor = solid ? "text-ink" : "text-white";
 
   return (
     <>
@@ -30,35 +34,41 @@ export function Header() {
         }`}
       >
         <div className="container-x flex h-16 items-center justify-between gap-6 md:h-20">
-          <Link href="/" aria-label="Valley Steel, home" className="shrink-0">
+          <Link href={href("/")} aria-label={c.ui.homeAria} className="shrink-0">
             <Logo variant="compact" reversed={!solid} className="h-8 w-auto md:h-9" />
           </Link>
 
-          <nav aria-label="Main" className="ml-auto hidden lg:block">
+          <nav aria-label={c.ui.mainNav} className="ms-auto hidden lg:block">
             <ul className="flex items-center gap-8">
-              {nav.map((item) => (
+              {c.nav.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
-                    className={`text-sm font-medium transition-opacity hover:opacity-70 ${solid ? "text-ink" : "text-white"}`}
+                    href={href(item.href)}
+                    className={`text-sm font-medium transition-opacity hover:opacity-70 ${linkColor}`}
                   >
                     {item.label}
                   </Link>
                 </li>
               ))}
+              <li className={`border-s ps-8 ${solid ? "border-line" : "border-white/30"}`}>
+                <LanguageSwitch className={`text-sm font-medium transition-opacity hover:opacity-70 ${linkColor}`} />
+              </li>
             </ul>
           </nav>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-expanded={open}
-            aria-controls="site-menu"
-            className="inline-flex items-center gap-3 rounded bg-brand-950 py-2 pl-4 pr-3 text-sm font-medium text-white transition-colors hover:bg-brand-700 lg:hidden"
-          >
-            Menu
-            <span aria-hidden className="text-lg leading-none">+</span>
-          </button>
+          <div className="flex items-center gap-4 lg:hidden">
+            <LanguageSwitch className={`text-sm font-medium ${linkColor}`} />
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-expanded={open}
+              aria-controls="site-menu"
+              className="inline-flex items-center gap-3 rounded bg-brand-950 py-2 ps-4 pe-3 text-sm font-medium text-white transition-colors hover:bg-brand-700"
+            >
+              {c.ui.menu}
+              <span aria-hidden className="text-lg leading-none">+</span>
+            </button>
+          </div>
         </div>
       </header>
       <MenuOverlay open={open} onClose={() => setOpen(false)} />

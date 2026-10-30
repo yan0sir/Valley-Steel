@@ -6,7 +6,7 @@ export function ArrowIcon({ className = "", direction = "right" }: { className?:
     <svg
       viewBox="0 0 16 16"
       aria-hidden
-      className={`h-4 w-4 ${direction === "up" ? "-rotate-90" : ""} ${className}`}
+      className={`h-4 w-4 ${direction === "up" ? "-rotate-90" : "rtl:-scale-x-100"} ${className}`}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -80,7 +80,7 @@ export function TextLink({ href, children, dark = false }: { href: string; child
       }`}
     >
       {children}
-      <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-1" />
+      <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
     </Link>
   );
 }
@@ -104,12 +104,22 @@ export function SectionLabel({ children, dark = false }: { children: ReactNode; 
   );
 }
 
-/** Labelled frame standing in for a photo from the shot list. */
-export function ImagePlaceholder({ shot, className = "" }: { shot: string; className?: string }) {
+/** Labelled frame standing in for a photo from the shot list. Pass translated words for Arabic pages. */
+export function ImagePlaceholder({
+  shot,
+  className = "",
+  photoWord = "Photo",
+  placeholderWord = "Placeholder",
+}: {
+  shot: string;
+  className?: string;
+  photoWord?: string;
+  placeholderWord?: string;
+}) {
   return (
-    <div className={`img-ph ${className}`} role="img" aria-label={`Placeholder: ${shot}`}>
-      <span className="t-label absolute bottom-3 left-3 rounded bg-black/40 px-2 py-1 text-[10px] text-white/90">
-        Photo · {shot}
+    <div className={`img-ph ${className}`} role="img" aria-label={`${placeholderWord}: ${shot}`}>
+      <span className="t-label absolute bottom-3 start-3 rounded bg-black/40 px-2 py-1 text-[10px] text-white/90">
+        {photoWord} · {shot}
       </span>
     </div>
   );

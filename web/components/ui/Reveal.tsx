@@ -25,7 +25,7 @@ export function Rule({ className = "", dark = false }: { className?: string; dar
   return (
     <motion.div
       aria-hidden
-      className={`h-px origin-left ${dark ? "bg-white/15" : "bg-line"} ${className}`}
+      className={`h-px origin-left rtl:origin-right ${dark ? "bg-white/15" : "bg-line"} ${className}`}
       initial={reduce ? false : { scaleX: 0 }}
       whileInView={{ scaleX: 1 }}
       viewport={{ once: true }}

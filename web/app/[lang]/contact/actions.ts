@@ -1,6 +1,8 @@
 "use server";
 
 import { headers } from "next/headers";
+import { content } from "@/content";
+import { defaultLocale, isLocale } from "@/lib/i18n";
 
 export type ContactState = {
   status: "idle" | "success" | "error";
@@ -26,6 +28,9 @@ const escape = (s: string) =>
 
 export async function sendContact(_prev: ContactState, formData: FormData): Promise<ContactState> {
   const get = (k: string) => String(formData.get(k) ?? "").trim();
+  // Server Actions cannot read root params, so the form posts its locale.
+  const lang = isLocale(get("lang")) ? (get("lang") as keyof typeof content) : defaultLocale;
+  const t = content[lang].contact.form;
   const values = {
     name: get("name"),
     company: get("company"),
@@ -38,16 +43,16 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
   if (get("website")) return { status: "success" };
 
   const errors: ContactState["errors"] = {};
-  if (values.name.length < 2) errors.name = "Please enter your name.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errors.email = "Please enter a valid email address.";
-  if (values.message.length < 10) errors.message = "Please tell us a little more (at least 10 characters).";
-  if (formData.get("consent") !== "on") errors.consent = "Please agree to the Privacy Policy.";
-  if (values.message.length > 5000 || values.name.length > 200) errors.message = "Your message is too long.";
+  if (values.name.length < 2) errors.name = t.errName;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errors.email = t.errEmail;
+  if (values.message.length < 10) errors.message = t.errMessage;
+  if (formData.get("consent") !== "on") errors.consent = t.errConsent;
+  if (values.message.length > 5000 || values.name.length > 200) errors.message = t.errTooLong;
   if (Object.keys(errors).length) return { status: "error", errors, values };
 
   const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
   if (rateLimited(ip)) {
-    return { status: "error", message: "Too many messages. Please call us instead.", values };
+    return { status: "error", message: t.errRate, values };
   }
 
   const key = process.env.RESEND_API_KEY;
@@ -60,7 +65,7 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
       return { status: "success" };
     }
     console.error("[contact] RESEND_API_KEY / CONTACT_TO / CONTACT_FROM missing");
-    return { status: "error", message: "Something went wrong. Please try again or call us.", values };
+    return { status: "error", message: t.errGeneric, values };
   }
 
   const rows = Object.entries(values)
@@ -74,14 +79,14 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
       from,
       to: [to],
       reply_to: values.email,
-      subject: `Website enquiry from ${values.name}${values.company ? ` (${values.company})` : ""}`,
+      subject: `Website enquiry (${lang.toUpperCase()}) from ${values.name}${values.company ? ` (${values.company})` : ""}`,
       html: `<table cellpadding="6">${rows}</table>`,
     }),
   });
 
   if (!res.ok) {
     console.error("[contact] Resend error", res.status, await res.text());
-    return { status: "error", message: "Something went wrong. Please try again or call us.", values };
+    return { status: "error", message: t.errGeneric, values };
   }
   return { status: "success" };
 }

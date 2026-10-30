@@ -1,13 +1,17 @@
+"use client";
+
 import Link from "next/link";
-import type { ProductFamily } from "@/content/products";
+import type { ProductFamily } from "@/content";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { Cutout } from "@/components/illustrations/iso";
 import { ArrowIcon } from "@/components/ui/primitives";
 
 /** Product family card with an Auremin-style floating cutout. The whole card is the link. */
 export function ProductCard({ product, index }: { product: ProductFamily; index?: number }) {
+  const { href } = useI18n();
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={href(`/products/${product.slug}`)}
       className="group flex h-full flex-col rounded-xl bg-tint p-5 transition-colors duration-300 hover:bg-brand-200/60 md:p-6"
     >
       <div className="flex items-start justify-between gap-4">

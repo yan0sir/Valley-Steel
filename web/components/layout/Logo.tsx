@@ -18,6 +18,7 @@ export function Logo({
       viewBox={full ? "0 0 240 104" : "0 0 240 78"}
       className={className}
       role="img"
+      direction="ltr"
       aria-label="Valley Steel Trading W.L.L."
     >
       <rect x="6" y="2" width="130" height="10" fill="#5591C5" />

@@ -1,23 +1,27 @@
-import { processSteps } from "@/content/home";
+"use client";
+
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { IsoIllustration } from "@/components/illustrations/iso";
 import { SectionLabel } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/Reveal";
 
 export function ProcessSteps() {
+  const { c } = useI18n();
+  const { processLabel, processHeading, processSteps } = c.home;
   return (
     <section className="border-b border-line" aria-labelledby="process-heading">
       <div className="container-x grid gap-6 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-4">
-          <SectionLabel>How we work</SectionLabel>
+          <SectionLabel>{processLabel}</SectionLabel>
         </div>
         <h2 id="process-heading" className="t-h2 md:col-span-8">
-          From mill to site, in five steps.
+          {processHeading}
         </h2>
       </div>
 
       <ol className="container-x grid border-t border-line md:grid-cols-5" role="list">
         {processSteps.map((s, i) => (
-          <li key={s.title} className="border-b border-dashed border-line md:border-b-0 md:border-r md:last:border-r-0">
+          <li key={s.title} className="border-b border-dashed border-line md:border-b-0 md:border-e md:last:border-e-0">
             <Reveal delay={i * 0.08} className="flex h-full flex-col">
               <div className="flex items-stretch border-b border-line">
                 <span
