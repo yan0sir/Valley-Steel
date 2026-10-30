@@ -25,7 +25,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     <ReactLenis
       root
       options={{
-        lerp: 0.1,
+        // Each wheel / trackpad step glides to rest over 1.2s on an exponential ease-out
+        // (Lenis' signature feel); duration + easing take precedence over lerp.
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
         wheelMultiplier: 1,
         anchors: { offset: -96 },
         stopInertiaOnNavigate: true,

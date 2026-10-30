@@ -26,7 +26,7 @@ export function Header() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
-          solid ? "border-b border-line bg-bg/90 backdrop-blur-md" : "bg-transparent"
+          solid ? "border-b border-line bg-bg/95" : "bg-transparent"
         }`}
       >
         <div className="container-x flex h-16 items-center justify-between gap-6 md:h-20">

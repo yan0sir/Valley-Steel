@@ -33,7 +33,7 @@ function IconButtons({ dark = false }: { dark?: boolean }) {
 /** Compact chip in the hero (APC "Rather get in touch fast?"). */
 export function QuickContact() {
   return (
-    <div className="flex items-center gap-4 rounded-xl bg-black/35 p-2 pl-4 text-white backdrop-blur-md">
+    <div className="flex items-center gap-4 rounded-xl bg-black/50 p-2 pl-4 text-white">
       <p className="text-sm">Rather get in touch fast?</p>
       <Avatar size={40} />
       <IconButtons dark />
