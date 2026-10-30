@@ -1,6 +1,8 @@
 // Draft product data — see ../../website-brief.md §6.4. All specification values are
 // unconfirmed drafts for the client to check; [[brackets]] mark facts still to supply.
 
+import type { PhotoKey } from "./images";
+
 export type ProductFamily = {
   slug: string;
   name: string;
@@ -12,6 +14,8 @@ export type ProductFamily = {
   specs: [label: string, value: string][];
   standards: string[];
   related: string[];
+  /** In-context stock photo shown under the hero (key in content/images.ts). */
+  photo?: PhotoKey;
   /** Path under /public/docs once the client supplies the PDF. */
   datasheet?: string;
 };
@@ -22,6 +26,7 @@ export const products: ProductFamily[] = [
     name: "Rebar & mesh",
     summary: "Deformed bars from 8 to 32 mm and welded mesh, to BS 4449 and ASTM A615.",
     cutout: "rebar",
+    photo: "productRebar",
     intro:
       "High-yield deformed bars and welded mesh for reinforced concrete, held in stock in all common diameters.",
     applications: ["Foundations and piles", "Slabs, beams and columns", "Retaining walls", "Precast elements"],
@@ -48,6 +53,7 @@ export const products: ProductFamily[] = [
     name: "Structural sections",
     summary: "IPE, HEA, HEB, UB, UC, angles and channels for frames of every size.",
     cutout: "beam",
+    photo: "productBeams",
     intro:
       "Hot-rolled beams, columns, angles and channels for steel frames, mezzanines, sheds and industrial structures.",
     applications: ["Building frames", "Warehouses and sheds", "Mezzanines and platforms", "Industrial structures"],
@@ -73,6 +79,7 @@ export const products: ProductFamily[] = [
     name: "Plates & sheets",
     summary: "Hot-rolled, cold-rolled and chequered plate, cut to your dimensions.",
     cutout: "plate",
+    photo: "productPlates",
     intro: "Plate and sheet in the thicknesses fabricators use every day, sheared to size in our yard.",
     applications: ["Base plates and connections", "Tanks and fabrication", "Flooring and walkways", "Machinery"],
     why: ["Wide range of thicknesses", "Sheared to your dimensions", "Full mill traceability", "Fast turnaround"],
@@ -92,6 +99,7 @@ export const products: ProductFamily[] = [
     name: "Pipes & hollow sections",
     summary: "ERW and seamless pipe, SHS and RHS for structures and services.",
     cutout: "pipe",
+    photo: "productPipes",
     intro: "Pipe and structural hollow sections for frames, handrails, scaffolding and building services.",
     applications: ["Structural frames", "Handrails and balustrades", "Water and services lines", "Fencing"],
     why: ["Black and galvanized", "Square, rectangular and round", "Cut to length", "Delivered with certificates"],
@@ -111,6 +119,7 @@ export const products: ProductFamily[] = [
     name: "Coils & galvanized",
     summary: "HR, CR and GI coil and sheet for fabricators and manufacturers.",
     cutout: "coil",
+    photo: "productCoils",
     intro: "Hot-rolled, cold-rolled and galvanized coil and sheet for roll-forming, ducting and manufacturing.",
     applications: ["Roll-forming and purlins", "HVAC ducting", "Roofing and cladding", "Appliance and OEM parts"],
     why: ["HR, CR and GI in stock", "Slit-to-width on request", "Consistent coating weights", "Regular supply"],
@@ -129,6 +138,7 @@ export const products: ProductFamily[] = [
     name: "Wire & accessories",
     summary: "Wire rod, binding wire, couplers and spacers to finish the job.",
     cutout: "wire",
+    photo: "productWire",
     intro: "Everything you need alongside the rebar: wire rod, binding wire and reinforcement accessories.",
     applications: ["Rebar fixing", "Mesh and cage making", "Splicing bars", "Cover and spacing"],
     why: ["One order with your rebar", "Stocked in bulk", "Matched to your bar sizes", "Delivered together"],
@@ -146,6 +156,7 @@ export const products: ProductFamily[] = [
     name: "Processing",
     summary: "Cut & bend, cut-to-length and shearing, done in our yard before delivery.",
     cutout: "bent",
+    photo: "productProcessing",
     intro: "We process steel in our yard so it arrives on site ready to fix, weld or erect.",
     applications: ["Bar-bending schedules", "Cut-to-length sections and pipe", "Plate shearing", "Kitted deliveries"],
     why: ["Less waste on site", "Faster fixing", "Tagged by schedule mark", "One supplier for steel and processing"],

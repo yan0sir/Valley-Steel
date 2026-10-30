@@ -5,9 +5,15 @@ import { PageHero } from "@/components/blocks/PageHero";
 import { ProductCard } from "@/components/blocks/ProductCard";
 import { ContactCTA } from "@/components/blocks/ContactCard";
 import { Cutout } from "@/components/illustrations/iso";
+import { Photo } from "@/components/ui/Photo";
 import { Button, SectionLabel } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/Reveal";
 import { T } from "@/components/ui/T";
+
+// Every family page is prerendered from generateStaticParams, so a navigation that waits
+// for the page (instead of streaming into a shared shell) is fast; opt out of the
+// instant-navigation check that flags reading `params` outside <Suspense>.
+export const instant = false;
 
 export function generateStaticParams() {
   return products.map((p) => ({ family: p.slug }));
@@ -63,6 +69,17 @@ export default async function ProductPage({ params }: PageProps<"/products/[fami
           </div>
         </div>
       </div>
+
+      {/* In-context photo */}
+      {product.photo && (
+        <div className="container-x pb-12 md:pb-16">
+          <Photo
+            name={product.photo}
+            sizes="(min-width: 1440px) 1392px, 100vw"
+            className="aspect-[16/9] w-full rounded-xl md:aspect-[21/9]"
+          />
+        </div>
+      )}
 
       {/* Overview */}
       <section className="border-y border-line" aria-labelledby="overview-heading">
