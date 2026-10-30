@@ -2,17 +2,20 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { useLenis } from "lenis/react";
 import { nav, site } from "@/content/site";
 import { T, plain } from "@/components/ui/T";
 import { Logo } from "./Logo";
 
 export function MenuOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
   const panel = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useEffect(() => {
     if (!open) return;
     const prev = document.activeElement as HTMLElement | null;
     document.body.style.overflow = "hidden";
+    lenis?.stop();
     panel.current?.querySelector<HTMLElement>("a,button")?.focus();
 
     const onKey = (e: KeyboardEvent) => {
@@ -32,10 +35,11 @@ export function MenuOverlay({ open, onClose }: { open: boolean; onClose: () => v
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      lenis?.start();
       window.removeEventListener("keydown", onKey);
       prev?.focus();
     };
-  }, [open, onClose]);
+  }, [open, onClose, lenis]);
 
   return (
     <div
@@ -45,6 +49,7 @@ export function MenuOverlay({ open, onClose }: { open: boolean; onClose: () => v
       aria-modal="true"
       aria-label="Site menu"
       hidden={!open}
+      data-lenis-prevent
       className="fixed inset-0 z-50 overflow-y-auto bg-brand-950 text-white"
     >
       <div className="container-x flex min-h-full flex-col">
