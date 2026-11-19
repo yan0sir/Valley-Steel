@@ -99,7 +99,8 @@ export type Content = {
     certifications: { name: string; detail: string }[];
     capabilitiesLabel: string;
     capabilitiesHeading: string;
-    capabilities: { title: string; body: string; illustration: IllustrationName }[];
+    /** Sticky card stack: `photo` fills the left panel while the card is active, `detail` sits inside the card. */
+    capabilities: { title: string; body: string; illustration: IllustrationName; photo: PhotoKey; detail: PhotoKey }[];
     continuity: string;
     discover: string;
     facilitiesLink: string;
